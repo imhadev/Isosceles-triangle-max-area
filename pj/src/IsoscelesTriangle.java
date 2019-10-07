@@ -1,11 +1,11 @@
 import java.io.*;
 
 public class IsoscelesTriangle {
-
-    public static double maxSquare = -1;
-    public static String[] maxValues = new String[6];
-
     public static void main(String[] args) {
+        double maxSquare = -1;
+        double curS;
+        String[] maxValues = new String[6];
+
         BufferedReader br = null;
         PrintWriter writer = null;
         try {
@@ -21,13 +21,18 @@ public class IsoscelesTriangle {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] values = line.split(" ");
-                CheckIsoscelesMax(values);
+                curS = CheckIsoscelesMax(values);
+
+                if (curS > maxSquare) {
+                    maxSquare = curS;
+                    for (int i = 0; i < values.length; i++) {
+                        maxValues[i] = values[i];
+                    }
+                }
             }
 
             if (maxSquare != -1) {
-                for (int i = 0; i < maxValues.length; i++) {
-                    writer.print(maxValues[i] + " ");
-                }
+                writer.print(String.join(" ", maxValues));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -42,9 +47,9 @@ public class IsoscelesTriangle {
         }
     }
 
-    public static void CheckIsoscelesMax(String[] values) {
+    public static double CheckIsoscelesMax(String[] values) {
         if (values.length != 6) {
-            return;
+            return -1;
         }
 
         double a, b, c;
@@ -64,22 +69,19 @@ public class IsoscelesTriangle {
             c = Math.sqrt((y1 - z1) * (y1 - z1) + (y2 - z2) * (y2 - z2));
 
             if (((a + b) == c) || ((a + c) == b) || ((b + c == a))) {
-                return;
+                return -1;
             }
 
             if ((a == b) || (a == c) || (b == c)) {
                 p = (a + b + c) / 2;
                 s = Math.sqrt(p * (p - a) * (p - b) * (p - c));
 
-                if (s > maxSquare) {
-                    maxSquare = s;
-                    for (int i = 0; i < values.length; i++) {
-                        maxValues[i] = values[i];
-                    }
-                }
+                return s;
             }
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }
+
+        return -1;
     }
 }
