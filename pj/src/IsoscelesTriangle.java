@@ -1,38 +1,40 @@
 import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class IsoscelesTriangle {
+
+    private static final Logger logger = Logger.getLogger(IsoscelesTriangle.class.getName());
+
     public static void main(String[] args) {
         double maxSquare = -1;
         double curS;
-        String[] maxValues = new String[6];
+        String maxValues = null;
 
         BufferedReader br = null;
         PrintWriter writer = null;
         try {
-            if (args.length == 0) {
-                br = new BufferedReader(new FileReader("in.txt"));
-                writer = new PrintWriter("out.txt");
-            }
-            else {
+            if (args.length == 2) {
                 br = new BufferedReader(new FileReader(args[0]));
                 writer = new PrintWriter(args[1]);
+            }
+            else {
+                br = new BufferedReader(new FileReader("in.txt"));
+                writer = new PrintWriter("out.txt");
             }
 
             String line;
             while ((line = br.readLine()) != null) {
-                String[] values = line.split(" ");
-                curS = CheckIsoscelesMax(values);
+                curS = CheckIsoscelesMax(line);
 
                 if (curS > maxSquare) {
                     maxSquare = curS;
-                    for (int i = 0; i < values.length; i++) {
-                        maxValues[i] = values[i];
-                    }
+                    maxValues = line;
                 }
             }
 
             if (maxSquare != -1) {
-                writer.print(String.join(" ", maxValues));
+                writer.print(maxValues);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -47,8 +49,10 @@ public class IsoscelesTriangle {
         }
     }
 
-    public static double CheckIsoscelesMax(String[] values) {
+    public static double CheckIsoscelesMax(String line) {
+        String[] values = line.split(" ");
         if (values.length != 6) {
+            logger.log(Level.INFO, "Incorrect number of values");
             return -1;
         }
 
@@ -69,6 +73,7 @@ public class IsoscelesTriangle {
             c = Math.sqrt((y1 - z1) * (y1 - z1) + (y2 - z2) * (y2 - z2));
 
             if (((a + b) == c) || ((a + c) == b) || ((b + c == a))) {
+                logger.log(Level.INFO, "Not a triangle");
                 return -1;
             }
 
@@ -78,10 +83,13 @@ public class IsoscelesTriangle {
 
                 return s;
             }
+            else {
+                logger.log(Level.INFO, "Not a isosceles triangle");
+                return -1;
+            }
         } catch (NumberFormatException e) {
-            e.printStackTrace();
+            logger.log(Level.INFO, "Error doing parseInt");
+            return -1;
         }
-
-        return -1;
     }
 }
