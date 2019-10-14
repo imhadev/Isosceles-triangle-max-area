@@ -25,7 +25,8 @@ public class IsoscelesTriangle {
         CustomFileReader customFileReader = CustomFileReader.create(input);
 
         if (customFileReader == null) {
-            return;
+            logger.log(Level.SEVERE, "Wrong input file");
+            System.exit(1);
         }
 
         String line;
@@ -47,7 +48,7 @@ public class IsoscelesTriangle {
                 writer.print(maxAreaValues);
             }
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Wrong output file");
         }
         customFileReader.close();
     }
