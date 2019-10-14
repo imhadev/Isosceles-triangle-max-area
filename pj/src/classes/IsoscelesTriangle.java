@@ -10,19 +10,17 @@ public class IsoscelesTriangle {
     private static final Logger logger = Logger.getLogger(IsoscelesTriangle.class.getName());
 
     public static void main(String[] args) {
+        if (args.length != 2) {
+            logger.log(Level.SEVERE, "Wrong arguments");
+            System.exit(1);
+        }
+
         double maxArea = -1;
         String maxAreaValues = null;
         double curArea;
 
-        String input;
-        String output;
-        if (args.length == 2) {
-            input = args[0];
-            output = args[1];
-        } else {
-            input = "in.txt";
-            output = "out.txt";
-        }
+        String input = args[0];
+        String output = args[1];
 
         CustomFileReader customFileReader = CustomFileReader.create(input);
 
